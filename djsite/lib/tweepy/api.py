@@ -59,7 +59,8 @@ class API(object):
         path = '/statuses/user_timeline.json',
         payload_type = 'status', payload_list = True,
         allowed_param = ['id', 'user_id', 'screen_name', 'since_id',
-                          'max_id', 'count', 'page', 'include_rts']
+                          'max_id', 'count', 'page', 'include_rts',
+                          'trim_user', 'include_entities']
     )
 
     """ statuses/mentions """
@@ -168,13 +169,13 @@ class API(object):
     )
 
     """ Perform bulk look up of users from user ID or screenname """
-    def lookup_users(self, user_ids=None, screen_names=None):
-        return self._lookup_users(list_to_csv(user_ids), list_to_csv(screen_names))
+    def lookup_users(self, user_ids=None, screen_names=None, include_entities=True):
+        return self._lookup_users(list_to_csv(user_ids), list_to_csv(screen_names), include_entities)
 
     _lookup_users = bind_api(
         path = '/users/lookup.json',
         payload_type = 'user', payload_list = True,
-        allowed_param = ['user_id', 'screen_name'],
+        allowed_param = ['user_id', 'screen_name', 'include_entities'],
     )
 
     """ Get the authenticated user """

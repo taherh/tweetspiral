@@ -39,6 +39,7 @@ def bind_api(**config):
             self.retry_delay = kargs.pop('retry_delay', api.retry_delay)
             self.retry_errors = kargs.pop('retry_errors', api.retry_errors)
             self.headers = kargs.pop('headers', {})
+            self.skip_cache_write = kargs.pop('skip_cache_write', False)
             self.build_parameters(args, kargs)
 
             # Pick correct URL root to use
@@ -173,7 +174,7 @@ def bind_api(**config):
             conn.close()
 
             # Store result into cache if one is available.
-            if self.use_cache and self.api.cache and self.method == 'GET' and result:
+            if self.use_cache and self.api.cache and self.method == 'GET' and result and not self.skip_cache_write:
                 self.api.cache.store(url, result)
 
             return result
@@ -192,4 +193,5 @@ def bind_api(**config):
         _call.pagination_mode = 'page'
 
     return _call
+
 
