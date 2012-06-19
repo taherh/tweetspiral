@@ -1,0 +1,15 @@
+<div class="input_users">
+  <h3>You entered:</h3>
+  <table class="input_users_grid">
+    <tr>
+    {% for user in input_users %}
+      {% if forloop.counter0|divisibleby:"4" and forloop.counter0 != 0 %}
+        </tr><tr>
+      {% endif %}
+      <td>
+        {% include "macros/user_icon.html" with user=user only %}
+      </td>
+    {% endfor %}
+    </tr>
+  </table>
+</div>

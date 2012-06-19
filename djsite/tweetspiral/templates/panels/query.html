@@ -1,0 +1,23 @@
+<div class="query_pane">
+  {% if form.errors %}
+    <p class='error'>Please correct the error{{ form.errors|pluralize }} below.</p>
+  {% else %}
+    <p class='error'>&nbsp;</p>
+  {% endif %}
+
+  <form action="analyze" method="get">
+    <table class="query_form">
+      <tr>
+        <td class="label">Enter a few twitter handles related to an interest:</td>
+        <td>{{form.twitter_handles}}</td>
+        <td>{{form.twitter_handles.errors}}</td>
+      </tr>
+      <tr>
+        <td class="label">Find:</td>
+        <td>{{form.command}}</td>
+        <td>{{form.command.errors}}</td>
+      </tr>
+      <tr><td colspan=2 class="submit"><input type="submit" value="Submit"></td><td></td></tr>
+    </table>      
+  </form>
+</div>

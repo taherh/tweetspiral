@@ -1,0 +1,27 @@
+<div class="main_results {{relation_type}}">
+  <h3>{{num_results}} {{relation_type|title}} in Common</h3>
+  {% if users %}
+    {% if followers_threshold %}
+      <p class="warning">
+        Some of your input users have a large number of followers, so these
+        results are just a rough approximation.  Try comparing 'follows'
+        instead of 'followers'.
+      </p>
+    {% endif %}
+    <p>Displaying top {{ users|length }} of {{num_results}} {{relation_type}}.</p>
+    <table class="result_grid">
+      <tr>
+      {% for user in users %}
+        {% if forloop.counter0|divisibleby:"5" and forloop.counter0 != 0 %}
+          </tr><tr>
+        {% endif %}
+        <td>
+          {% include "macros/user_icon.html" with user=user only %}
+        </td>
+      {% endfor %}
+      </tr>
+    </table>
+  {% else %}
+    <p>No overlap</p>
+  {% endif %}
+</div>

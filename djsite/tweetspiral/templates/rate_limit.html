@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block message %}
+    {% if authed %}
+        <p>Sorry, you have reached your Twitter API quota for this app.  Try again
+          later.
+        </p>
+    {% else %}
+        <p>Sorry, the Twitter api quota has been reached.
+        Try <a href="{% url login %}" style="font-weight: bold">signing in</a> and trying again.</p>
+    {% endif %}
+  <p><a href="{{home}}">Return Home</a></p>
+{% endblock message %}

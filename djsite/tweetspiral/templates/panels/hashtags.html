@@ -1,0 +1,12 @@
+<div class="hashtags {{relation_type}}">
+  <h3>Top hashtags for {{relation_type}}:</h3>
+  {% if hashtags %}
+    <ul class="hashtag_list">
+      {% for hashtag in hashtags %}
+        <li>
+          <a href="http://twitter.com/#!/search/{{hashtag|urlencode}}" target="_blank">{{ hashtag }}</a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+</div>

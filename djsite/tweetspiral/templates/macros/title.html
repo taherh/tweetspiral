@@ -1,0 +1,9 @@
+{% spaceless %}
+{% if form.twitter_handles %}
+  {% if command == "friend_overlap" or command == "follower_overlap" %}
+    Top {{relation_type|title}} in Common for [ {% for user in input_users %}@{{user.screen_name}} {% endfor %}]
+  {% elif command == "group_profile" %}
+    Group Profile for [ {% for user in input_users %}@{{user.screen_name}} {% endfor %}]
+  {% endif %}
+{% endif %}
+{% endspaceless %}

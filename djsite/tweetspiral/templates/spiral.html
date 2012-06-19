@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block query %}
+<div class="query_container">
+{% include "panels/query.html" %}
+{% if input_users %}
+  {% include "panels/input_users.html" %}
+{% else %}
+  {% include "panels/sample_query.html" %}
+{% endif %}
+<hr>
+</div>
+{% endblock query %}
+
+{% block results %}
+{% if form.is_valid %}
+  {% if msgs %}
+    <p class="messages">{{msgs}}</p>
+  {% else %}
+    <div class="tweet_button">
+      <a href="https://twitter.com/share" class="twitter-share-button" data-url="{{tweet_url}}" data-text="{% include 'macros/title.html' %} |" data-count="none" data-via="TweetSpiral">Tweet</a>
+      <div style="display: inline-block; font-size: small; font-style: italic; vertical-align: top;">&nbsp;(Tweet this query!)</div> 
+    </div>
+    
+    <div class="results_pane">
+      {% include "panels/main_results.html" %}
+      <div class="entity_results {{relation_type}}">
+        {% include "panels/mentions.html" %}
+        {% include "panels/hashtags.html" %}
+      </div>
+    </div>
+  {% endif %}
+  <hr>
+{% endif %}
+{% endblock results %}

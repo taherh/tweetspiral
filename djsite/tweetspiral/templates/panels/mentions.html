@@ -1,0 +1,18 @@
+<div class="mentions">
+
+  <h3>Top mentions by {{relation_type}}:</h3>
+  {% if mentions %}
+    <table class="mentions_grid">
+      <tr>
+      {% for user in mentions %}
+        {% if forloop.counter0|divisibleby:mention_cols and forloop.counter0 != 0 %}
+          </tr><tr>
+        {% endif %}
+        <td>
+          {% include "macros/user_icon.html" with user=user only %}
+        </td>
+      {% endfor %}
+      </tr>
+    </table>
+  {% endif %}
+</div>
