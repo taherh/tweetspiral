@@ -1,7 +1,7 @@
 import os
 import sys
 
-path = '/srv/web/taherh.org/tweetspiral/'
+path = '/srv/web/tweetspiral.com/'
 if path not in sys.path:
     sys.path.append(path)
 

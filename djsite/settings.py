@@ -66,7 +66,7 @@ MEDIA_ROOT = ''
 MEDIA_URL = ''
 
 STATIC_URL = '/static/'
-STATIC_ROOT = '/srv/web/taherh.org/tweetspiral/static'
+STATIC_ROOT = '/srv/web/tweetspiral.com/static'
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
