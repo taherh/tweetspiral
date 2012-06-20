@@ -29,7 +29,7 @@
     <div class="logo"><a href="{{home}}"><img alt="TweetSpiral" src="{{STATIC_URL}}img/logo.png"></a></div>
     {% include "macros/follow_button.html" with screen_name="TweetSpiral" show_screen_name="true" only %}
 
-    <p>Find interesting people to follow on Twitter.</p>
+    <p class="tagline">Find interesting people to follow on Twitter.</p>
     {% include "panels/login_profile.html" with me=me only %}
     
     {% block query %}{% endblock %}

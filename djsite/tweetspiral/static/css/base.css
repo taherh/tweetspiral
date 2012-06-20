@@ -1,6 +1,7 @@
 body {
     padding-left: 20px;
     font-family: sans-serif;
+    color: #555;
     background-color: #f6f6f1;
 }
 
@@ -23,6 +24,10 @@ body>.twitter-follow-container {
 }
 div.follow>.twitter-follow-container {
     display: inline;
+}
+p.tagline {
+    margin-left: 16px;
+    font-size: larger;
 }
 .error,
 ul.errorlist {
@@ -228,7 +233,7 @@ div.sample_query {
     margin-left: 20px;
     float: left;
     max-width: 300px;
-    font-size: small;
+    font-size: 14px;
 }
 div.sample_query p {
     font-style: italic;
