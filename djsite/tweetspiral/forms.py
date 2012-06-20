@@ -8,6 +8,8 @@ class SpiralForm(forms.Form):
          ('group_profile', "Group Profile")))
     trigger_rate_limit = forms.BooleanField(widget=forms.HiddenInput(),
                                             required=False)
+    trigger_error = forms.BooleanField(widget=forms.HiddenInput(),
+                                       required=False)
 
 class AutocompleteForm(forms.Form):
     term = forms.CharField()

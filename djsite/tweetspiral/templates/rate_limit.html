@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block message %}
-    {% if authed %}
+    {% if logged_in %}
         <p>Sorry, you have reached your Twitter API quota for this app.  Try again
           later.
         </p>

@@ -52,6 +52,7 @@ div.query_container {
    height: 30px;
 }
 .query_form input[type='submit'] {
+    -webkit-appearance: button;
     width: 125px;
     height: 33px;
     padding: 5px;

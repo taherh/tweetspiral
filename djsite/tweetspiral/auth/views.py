@@ -2,7 +2,7 @@ from django.http import *
 from django.shortcuts import render, redirect
 from django.contrib.auth import logout as django_logout
 from django.core.urlresolvers import reverse
-from .oauth_settings import CONSUMER_KEY, CONSUMER_SECRET
+from django.conf import settings
 import tweepy
 
 def logout(request):
@@ -12,7 +12,9 @@ def logout(request):
     
 def login(request):
     callback = request.build_absolute_uri(reverse('callback'))
-    oauth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET, callback=callback)
+    oauth = tweepy.OAuthHandler(settings.TWITTER_CONSUMER_KEY,
+                                settings.TWITTER_CONSUMER_SECRET,
+                                callback=callback)
     auth_url = oauth.get_authorization_url(False)
     request.session['request_token_tw'] = (oauth.request_token.key,
                                            oauth.request_token.secret)
@@ -20,7 +22,8 @@ def login(request):
 
 def callback(request):
     verifier = request.GET.get('oauth_verifier')
-    oauth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
+    oauth = tweepy.OAuthHandler(settings.TWITTER_CONSUMER_KEY,
+                                settings.TWITTER_CONSUMER_SECRET)
     token = request.session.get('request_token_tw', None)
     # remove the request token now we don't need it
     request.session.delete('request_token_tw')

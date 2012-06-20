@@ -2,12 +2,7 @@
 import os, sys
 import socket
 
-if socket.gethostname() == "bali":
-    DEBUG = False
-else:
-    DEBUG = True
-    
-# DEBUG = True
+DEBUG = False
 
 # We install custom python libs in lib/.  Prepend to sys.path to allow
 # overriding of any installed libs
@@ -78,7 +73,7 @@ STATIC_ROOT = '/srv/web/taherh.org/tweetspiral/static'
 # Examples: "http://foo.com/media/", "/media/".
 ADMIN_MEDIA_PREFIX = '/media/'
 
-# Make this unique, and don't share it with anybody.
+# Make this unique, and don't share it with anybody.  (set this in local_settings)
 SECRET_KEY = ''
 
 # List of callables that know how to import templates from various sources.
@@ -132,3 +127,10 @@ INSTALLED_APPS = (
 API_CACHE = 'redis'  # 'memory', 'file', or 'redis'
 API_FILE_CACHE_PATH = '/srv/cache/tweepy/'
 API_CACHE_TIMEOUT = 259200  # 4 days
+
+# Keep passwords/keys in local_settings.py
+try:
+    from local_settings import *
+except ImportError:
+    print("Couldn't import local_settings")
+

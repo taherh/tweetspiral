@@ -1,4 +1,7 @@
 
+class FakeError(Exception):
+    pass
+
 class RateLimitError(Exception):
     logged_in = None
     def __init__(self, logged_in=False):

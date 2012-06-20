@@ -8,14 +8,13 @@ from .forms import *
 from .spiralengine import SpiralEngine
 from .autocomplete import AutocompleteEngine
 from .exceptions import *
-from .util import rate_limit_check
+from .util import error_check
 import tweepy
 
-@rate_limit_check
+@error_check
 def spiral(request):
     
-    ac_engine = AutocompleteEngine(request)
-    spiral_engine = SpiralEngine(request, ac_engine)
+    spiral_engine = SpiralEngine(request, AutocompleteEngine(request))
 
     tpl_data = {}
     tpl_data['tweet_url'] = request.build_absolute_uri()
@@ -50,15 +49,8 @@ def spiral(request):
             elif command in ("group_profile"):
                 tpl_data['mention_cols'] = 5
                 
-            try:
-                result = spiral_engine.process(command, clean_data)
-            except RateLimitError as e:
-                return redirect('rate_limit')
-            except Exception as e:
-                print("Exception: %s" % e)
-                if settings.DEBUG: raise
-            else:
-                tpl_data.update(result)
+            result = spiral_engine.process(command, clean_data)
+            tpl_data.update(result)
    
             return render(request, 'spiral.html', tpl_data)
         else:
@@ -91,5 +83,28 @@ def autocomplete(request):
     return http.HttpResponse(
         content, content_type='application/json')
 
-class RateLimitView(TemplateView):
+class SpiralErrorView(TemplateView):
+    def get_context_data(self, *args, **kwargs):
+        context = super(SpiralErrorView, self).get_context_data(*args, **kwargs)
+        try:
+            spiral_engine = SpiralEngine(self.request, None)
+        
+            tpl_data = {}
+            if spiral_engine.logged_in:
+                tpl_data['me'] = spiral_engine.api.me()
+                tpl_data['logged_in'] = True
+            else:
+                tpl_data['logged_in'] = False
+
+            context.update(tpl_data)
+        except Exception as e:
+            print("Exception in SpiralErrorView: %r" % e)
+            if settings.DEBUG: raise
+        return context
+    
+class RateLimitErrorView(SpiralErrorView):
     template_name = "rate_limit.html"
+
+class GeneralErrorView(SpiralErrorView):
+    template_name = "error.html"
+
