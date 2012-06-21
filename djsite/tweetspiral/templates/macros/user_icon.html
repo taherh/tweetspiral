@@ -1,12 +1,9 @@
 {% with intent_url="https://twitter.com/intent/user?screen_name="|add:user.screen_name %}
-<figure>
-  <a href="{{intent_url}}"><img class="profile" src="{{user.profile_image_url}}"></a>
+<figure class="hovercard">
+  <a href="{{intent_url}}"><img class="profile" src="{{user.profile_image_url}}" alt="@{{user.screen_name}}"></a>
   <figcaption>
     <div class="screen_name">
       <a href="{{intent_url}}">@{{user.screen_name}}</a>
-    </div>
-    <div class="follow">
-      {% include "macros/follow_button.html" with screen_name=user.screen_name show_screen_name="false" only %}
     </div>
   </figcaption>
 </figure>

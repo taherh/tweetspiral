@@ -17,11 +17,13 @@
   
     <link rel="shortcut icon" href="{{STATIC_URL}}img/icon.png">
   
+    <script type="text/javascript" src="http://platform.twitter.com/anywhere.js?id=rcGKNaKbtiJUv5EbcdleSQ&v=1"></script>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js"></script>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.js"></script>
     <script type="text/javascript" src="{{STATIC_URL}}js/jquery-ui.triggeredAutocomplete.js"></script>
     <script type="text/javascript" src="{{STATIC_URL}}js/tweetspiral.js"></script>
     
+    {% include "macros/twitter_anywhere.html" only %}
     {% include "macros/google_analytics.html" only %}
   </head>
   
