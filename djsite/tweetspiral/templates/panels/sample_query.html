@@ -5,5 +5,13 @@
     <li><a href="{% url analyze %}?twitter_handles=%40timoreilly+%40paulg+&command=friend_overlap">@TimOreilly, @PaulG</a></li>
     <li><a href="{% url analyze %}?twitter_handles=%40charlierose+%40piersmorgan+%40andersoncooper+&command=friend_overlap">@PiersMorgan, @AndersonCooper, @CharlieRose</a></li>
   </ul>
-  <p>Check out @TweetSpiral for more examples.</p>
+  {% with intent_url="https://twitter.com/intent/user?screen_name=TweetSpiral" %}
+    <p>Check out
+    <span class="hovercard" data-hovercard="TweetSpiral">
+      <span class="screen_name">
+        <a href="{{intent_url}}">@TweetSpiral</a>
+      </span>
+    </span>
+    for more examples.</p>
+  {% endwith %}
 </div>
