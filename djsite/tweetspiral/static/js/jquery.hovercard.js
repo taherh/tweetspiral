@@ -80,7 +80,7 @@
                                     '.hc-details-open-left > .hc-pic { float:left; } ' +
                                     '.hc-details-open-top { bottom:-10px; top:auto; padding: 10px 10px 2em;} ' +
                                     '.hc-details-open-top > .hc-pic { margin-top:10px; float:right;  }' +
-                                    '.hc-details .s-action{ position: absolute; top:8px; right:5px; } ' +
+                                    '.hc-details .s-action{ position: absolute; top:8px; right:12px; } ' +
                                     '.hc-details .s-card-pad{ border-top: solid 1px #eee; margin-top:10px; padding-top:10px; overflow:hidden; } ' +
                                     '.hc-details-open-top .s-card-pad { border:none; border-bottom: solid 1px #eee; margin-top:0;padding-top:0; margin-bottom:10px;padding-bottom:10px; }' +
                                     '.hc-details .s-card .s-strong{ font-weight:bold; color: #555; } ' +
