@@ -7,4 +7,10 @@ $(document).ready(function() {
         source: "/autocomplete.json",
         trigger: "@"
     });
+    
+    $(".hovercard").hovercard({
+        showTwitterCard: true,
+        openOnTop: true,
+        width: 350
+    });   
 });

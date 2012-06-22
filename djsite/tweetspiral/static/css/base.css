@@ -153,18 +153,13 @@ div.entity_results h3 {
     margin-bottom: 25px;
 }
 
-div.main_results figure {
-    margin: 12px;
-}
-
 div.mentions {
     margin-top: 12px;
     padding: 8px;
     background-color: rgb(200,205,210);
 }
-div.mentions figure {
-    margin: auto;
-    padding: 2px;
+div.mentions .user_icon {
+    margin: 8px 16px;
 }
 
 div.hashtags {
@@ -210,12 +205,15 @@ img.profile {
     height: 48px;
 }
 
-figure div.screen_name a {
+div.user_icon {
+    margin: 12px 25px;
+}
+.user_icon div.screen_name a {
     display: inline-block;
-    text-decoraiton: none;
+    text-decoration: none;
     text-overflow: ellipsis;
     overflow-x: hidden;
-    width: 100px;
+    width: 75px;
 }
 
 td.label {
@@ -248,8 +246,8 @@ div.input_users {
     float: left;
     margin-left: 20px;
 }
-div.input_users figure {
-    margin: 2px;
+div.input_users .user_icon {
+    margin: 4px;
 }
 hr {
     clear: both;

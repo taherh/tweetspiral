@@ -1,10 +1,14 @@
 {% with intent_url="https://twitter.com/intent/user?screen_name="|add:user.screen_name %}
-<figure class="hovercard">
-  <a href="{{intent_url}}"><img class="profile" src="{{user.profile_image_url}}" alt="@{{user.screen_name}}"></a>
-  <figcaption>
-    <div class="screen_name">
-      <a href="{{intent_url}}">@{{user.screen_name}}</a>
-    </div>
-  </figcaption>
-</figure>
+<div class="user_icon hovercard" data-hovercard="{{user.screen_name}}">
+  <div class="profile_image">
+    <img class="profile"
+        src="{{user.profile_image_url}}"
+        alt="@{{user.screen_name}}">
+  </div>
+  <div class="screen_name">
+    <a href="{{intent_url}}">
+        @{{user.screen_name}}
+    </a>
+  </div>
+</div>
 {% endwith %}
