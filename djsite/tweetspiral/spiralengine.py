@@ -114,7 +114,7 @@ class SpiralEngine(object):
         users = self.compute_overlap(input_users, relation_type)
         
         result['num_results'] = len(users)
-        result['users'] = users[0:25]
+        result['users'] = users[0:settings.MAX_OVERLAP_RESULTS]
         statuses = self.get_statuses(input_users)
         statuses.extend((user.status, user.followers_count) for user in users if hasattr(user, 'status'))
         (result['mentions'], result['hashtags']) = self.detect_entities(statuses, limit=9)

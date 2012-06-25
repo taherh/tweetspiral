@@ -6,8 +6,7 @@ from django.conf import settings
 import tweepy
 
 def logout(request):
-    request.session.flush()
-    response = django_logout(request)  # probably does nothing since we didn't "django_login"
+    django_logout(request)  # calls request.session.flush()
     return redirect('home')
     
 def login(request):

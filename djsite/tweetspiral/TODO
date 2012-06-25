@@ -1,15 +1,20 @@
-o skip protected input user that we are not following
+gaming (guess who tweeted)
+
+
+--
+
+X skip protected input user that we are not following
 
 o different submit buttons instead of drop down
 
-o sign in message on rate limit error
+X sign in message on rate limit error
 
 o setup heroku
 
 o blog about dev
-  X render vs. render_to_response
   o authenticate vs. authorize
-  o tweet button url encoding
+  X render vs. render_to_response
+  X tweet button url encoding
 
 X setup oauth flow
 X install twitter lib

@@ -128,6 +128,10 @@ API_CACHE = 'redis'  # 'memory', 'file', or 'redis'
 API_FILE_CACHE_PATH = '/srv/cache/tweepy/'
 API_CACHE_TIMEOUT = 259200  # 4 days
 
+MAX_OVERLAP_RESULTS = 25
+
+LOGOUT_ON_ERROR = True
+
 # Keep passwords/keys in local_settings.py
 try:
     from local_settings import *
