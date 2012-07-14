@@ -43,7 +43,8 @@
 
 
 (function ($) {
-    $.fn.hovercard = function (options) {
+
+    $.fn.hovercard = function (options0) {
 
         //Set defauls for the control
         var defaults = {
@@ -66,8 +67,11 @@
             onHoverOut: function () { }
         };
         //Update unset options with defaults if needed
-        var options = $.extend(defaults, options);
+        var options = $.extend(defaults, options0);
 
+        var open_hovercards = {};
+        var key_ctr = 0;
+        
         //CSS for hover card. Change per your need, and move these styles to your stylesheet (recommended).
         if ($('#css-hovercard').length <= 0) {
             var hovercardTempCSS = '<style id="css-hovercard" type="text/css">' +
@@ -108,7 +112,8 @@
 
             //add a relatively positioned class to the selected element
             obj.addClass("hc-preview");
-
+            $.data(obj, 'key', key_ctr++);
+            
             //if card image src provided then generate the image elementk
             var hcImg = '';
             if (options.cardImgSrc.length > 0) {
@@ -124,7 +129,7 @@
 
             //toggle hover card details on hover
             obj.hover(function () {
-                    
+
                 var $this = $(this);
                 adjustToViewPort($this);
 
@@ -136,11 +141,10 @@
                 curHCDetails.stop(true, true).delay(options.delay).fadeIn();
 
 
-                //Default functionality on hoverin, and also allows callback
-                if (typeof options.onHoverIn == 'function') {
-
-                    //check for custom profile. If already loaded don't load again
-                    if (options.showCustomCard && curHCDetails.find('.s-card').length <= 0) {
+                if (!$.data(curHCDetails[0], 'hc_loaded')) {
+                    
+                    //check for custom profile.
+                    if (options.showCustomCard) {
 
                         //Read data-hovercard url from the hovered element, otherwise look in the options. For custom card, complete url is required than just username.
                         var dataUrl = options.customDataUrl;
@@ -154,7 +158,7 @@
                     }
 
                     //check for twitter profile. If already loaded don't load again
-                    if (options.showTwitterCard && curHCDetails.find('.s-card').length <= 0) {
+                    if (options.showTwitterCard) {
 
                         //Look for twitter screen name in data-hovercard first, then in options, otherwise try with the hovered text
                         var tUsername = options.twitterScreenName.length > 0 ? options.twitterScreenName : obj.text();
@@ -168,7 +172,7 @@
                     }
 
                     //check for facebook profile. If already loaded don't load again
-                    if (options.showFacebookCard && curHCDetails.find('.s-card').length <= 0) {
+                    if (options.showFacebookCard) {
 
                         //Look for twitter screen name in data-hovercard first, then in options, otherwise try with the hovered text
                         var fbUsername = options.facebookUserName.length > 0 ? options.facebookUserName : obj.text();
@@ -180,28 +184,45 @@
 
                         LoadSocialProfile("facebook", fbUsername, curHCDetails);
                     }
-
+                }
+                
+                if (typeof options.onHoverIn == 'function') {
                     //Callback function                    
-                    options.onHoverIn.call(this);                    
+                    options.onHoverIn.call($this);                    
                 }
 
-            }, function () {
-                //Undo the z indices 
-                $this = $(this);
-
-                $this.find(".hc-details").eq(0).stop(true, true).fadeOut(300, function () {
-                    $this.css("zIndex", "0").find('.hc-details').css("zIndex", "0");
-                    obj.find('.screen_name').css("zIndex", "0");
-
+                open_hovercards[$.data(obj, 'key')] = obj;
+            },
+            closeHovercards
+            );
+        });
+        
+            function closeHovercards() {
+                for (key in open_hovercards) {
+                    if (open_hovercards.hasOwnProperty(key)) {
+                        if (open_hovercards[key]) {
+                            closeHovercard(open_hovercards[key]);
+                        }
+                    }
+                }
+            }
+            
+            function closeHovercard($hc_preview) {
+    
+                $hc_preview.find(".hc-details").eq(0).stop(true, true).fadeOut(300, function () {
+                    $hc_preview.css("zIndex", "0").find('.hc-details').css("zIndex", "0");
+                    $hc_preview.find('.screen_name').css("zIndex", "0");
+                    open_hovercards[$hc_preview] = false;
                     if (typeof options.onHoverOut == 'function') {
-                        options.onHoverOut.call(this);
+                        options.onHoverOut.call($hc_preview);
                     }
                 });
-            });
+    
+            }
 
             //Opening Directions adjustment
             function adjustToViewPort(hcPreview) {
-
+    
                 var hcDetails = hcPreview.find('.hc-details').eq(0);
                 var hcPreviewRect = hcPreview[0].getBoundingClientRect();
 
@@ -360,8 +381,7 @@
                 else {
                     curHCDetails.prepend(cardHTML(customCardJSON));
                 }
+                $.data(curHCDetails[0], 'hc_loaded', true);
             };
-        });
-
-    };
+        };
 })(jQuery);

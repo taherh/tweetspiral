@@ -1,0 +1,5 @@
+From ../, run:
+
+     coffee -o js/ -cw coffee/
+
+to automatically monitor and compile coffeescript files to ../js/
