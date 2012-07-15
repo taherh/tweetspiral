@@ -197,191 +197,191 @@
             );
         });
         
-            function closeHovercards() {
-                for (key in open_hovercards) {
-                    if (open_hovercards.hasOwnProperty(key)) {
-                        if (open_hovercards[key]) {
-                            closeHovercard(open_hovercards[key]);
+        function closeHovercards() {
+            for (key in open_hovercards) {
+                if (open_hovercards.hasOwnProperty(key)) {
+                    if (open_hovercards[key]) {
+                        closeHovercard(open_hovercards[key]);
+                    }
+                }
+            }
+        }
+        
+        function closeHovercard($hc_preview) {
+
+            $hc_preview.find(".hc-details").eq(0).stop(true, true).fadeOut(300, function () {
+                $hc_preview.css("zIndex", "0").find('.hc-details').css("zIndex", "0");
+                $hc_preview.find('.screen_name').css("zIndex", "0");
+                open_hovercards[$hc_preview] = false;
+                if (typeof options.onHoverOut == 'function') {
+                    options.onHoverOut.call($hc_preview);
+                }
+            });
+
+        }
+
+        //Opening Directions adjustment
+        function adjustToViewPort(hcPreview) {
+
+            var hcDetails = hcPreview.find('.hc-details').eq(0);
+            var hcPreviewRect = hcPreview[0].getBoundingClientRect();
+
+            var hcdTop = hcPreviewRect.top - 20; //Subtracting 20px of padding;
+            var hcdRight = hcPreviewRect.left + 35 + hcDetails.width(); //Adding 35px of padding;
+            var hcdBottom = hcPreviewRect.top + 35 + hcDetails.height(); //Adding 35px of padding;
+            var hcdLeft = hcPreviewRect.top - 10; //Subtracting 10px of padding;
+
+            //Check for forced open directions, or if need to be autoadjusted
+            if (options.openOnLeft || (options.autoAdjust && (hcdRight > window.innerWidth))) {
+                hcDetails.addClass("hc-details-open-left");
+            } else {
+                hcDetails.removeClass("hc-details-open-left");
+            }
+            if (options.openOnTop || (options.autoAdjust && (hcdBottom > window.innerHeight))) {
+                hcDetails.addClass("hc-details-open-top");
+            } else {
+                hcDetails.removeClass("hc-details-open-top");
+            }
+        }
+
+        //Private base function to load any social profile
+        function LoadSocialProfile(type, username, curHCDetails, customCardJSON) {
+            var cardHTML, urlToRequest, customCallback, loadingHTML, errorHTML;
+
+            switch (type) {
+                case "twitter":
+                    {
+                        urlToRequest = 'http://api.twitter.com/1/users/lookup.json?screen_name=' + username;
+                        cardHTML = function (profileData) {
+                            profileData = profileData[0];
+                            return '<div class="s-card s-card-pad">' +
+                                                    (profileData.profile_image_url ? ('<img class="s-img" src="' + profileData.profile_image_url + '" />') : '') +
+                                                    (profileData.name ? ('<label class="s-name">' + profileData.name + ' </label>') : '') +
+                                                    (profileData.screen_name ? ('(<a class="s-username" title="Visit Twitter profile for ' + profileData.name + '" href="http://twitter.com/' + profileData.screen_name + '">@' + profileData.screen_name + '</a>)<br/>') : '') +
+                                                    (profileData.location ? ('<label class="s-loc">' + profileData.location + '</label>') : '') +
+                                                    (profileData.description ? ('<p class="s-desc">' + profileData.description + '</p>') : '') +
+                                                    (profileData.url ? ('<a class="s-href" href="' + profileData.url + '">' + profileData.url + '</a><br/>') : '') +
+
+                                                    '<ul class="s-stats">' +
+                                                        (profileData.statuses_count ? ('<li>Tweets<br /><span class="s-count">' + profileData.statuses_count + '</span></li>') : '') +
+                                                        (profileData.friends_count ? ('<li>Following<br /><span class="s-count">' + profileData.friends_count + '</span></li>') : '') +
+                                                        (profileData.followers_count ? ('<li>Followers<br /><span class="s-count">' + profileData.followers_count + '</span></li>') : '') +
+                                                    '</ul>' +
+                                                '</div>';
+                        };
+                        loadingHTML = 'Contacting Twitter...';
+                        errorHTML = 'Invalid username or you have exceeded Twitter request limit.<br/><small>Please note, Twitter only allows 150 requests per hour.</small>';
+                        customCallback = function () { };
+
+                        curHCDetails.append('<span class="s-action"><a href="https://twitter.com/' + username + '" data-show-count="false" data-button="grey" data-width="65px" class="twitter-follow-button">Follow</a></span>');
+
+                        if (typeof twttr === 'undefined') {
+                            // Append the twitter script to the document to add a follow button
+                            var script = document.createElement('script');
+                            script.type = 'text/javascript';
+                            script.src = '//platform.twitter.com/widgets.js';
+                            script.id = 't-follow-script';
+                            $('body').append(script);
+                        } else {
+                            // tell twttr to rescan for follow buttons
+                            twttr.widgets.load();
                         }
                     }
-                }
-            }
-            
-            function closeHovercard($hc_preview) {
-    
-                $hc_preview.find(".hc-details").eq(0).stop(true, true).fadeOut(300, function () {
-                    $hc_preview.css("zIndex", "0").find('.hc-details').css("zIndex", "0");
-                    $hc_preview.find('.screen_name').css("zIndex", "0");
-                    open_hovercards[$hc_preview] = false;
-                    if (typeof options.onHoverOut == 'function') {
-                        options.onHoverOut.call($hc_preview);
-                    }
-                });
-    
-            }
-
-            //Opening Directions adjustment
-            function adjustToViewPort(hcPreview) {
-    
-                var hcDetails = hcPreview.find('.hc-details').eq(0);
-                var hcPreviewRect = hcPreview[0].getBoundingClientRect();
-
-                var hcdTop = hcPreviewRect.top - 20; //Subtracting 20px of padding;
-                var hcdRight = hcPreviewRect.left + 35 + hcDetails.width(); //Adding 35px of padding;
-                var hcdBottom = hcPreviewRect.top + 35 + hcDetails.height(); //Adding 35px of padding;
-                var hcdLeft = hcPreviewRect.top - 10; //Subtracting 10px of padding;
-
-                //Check for forced open directions, or if need to be autoadjusted
-                if (options.openOnLeft || (options.autoAdjust && (hcdRight > window.innerWidth))) {
-                    hcDetails.addClass("hc-details-open-left");
-                } else {
-                    hcDetails.removeClass("hc-details-open-left");
-                }
-                if (options.openOnTop || (options.autoAdjust && (hcdBottom > window.innerHeight))) {
-                    hcDetails.addClass("hc-details-open-top");
-                } else {
-                    hcDetails.removeClass("hc-details-open-top");
-                }
-            }
-
-            //Private base function to load any social profile
-            function LoadSocialProfile(type, username, curHCDetails, customCardJSON) {
-                var cardHTML, urlToRequest, customCallback, loadingHTML, errorHTML;
-
-                switch (type) {
-                    case "twitter":
-                        {
-                            urlToRequest = 'http://api.twitter.com/1/users/lookup.json?screen_name=' + username;
-                            cardHTML = function (profileData) {
-                                profileData = profileData[0];
-                                return '<div class="s-card s-card-pad">' +
-                                                        (profileData.profile_image_url ? ('<img class="s-img" src="' + profileData.profile_image_url + '" />') : '') +
-                                                        (profileData.name ? ('<label class="s-name">' + profileData.name + ' </label>') : '') +
-                                                        (profileData.screen_name ? ('(<a class="s-username" title="Visit Twitter profile for ' + profileData.name + '" href="http://twitter.com/' + profileData.screen_name + '">@' + profileData.screen_name + '</a>)<br/>') : '') +
-                                                        (profileData.location ? ('<label class="s-loc">' + profileData.location + '</label>') : '') +
-                                                        (profileData.description ? ('<p class="s-desc">' + profileData.description + '</p>') : '') +
-                                                        (profileData.url ? ('<a class="s-href" href="' + profileData.url + '">' + profileData.url + '</a><br/>') : '') +
-
-                                                        '<ul class="s-stats">' +
-                                                            (profileData.statuses_count ? ('<li>Tweets<br /><span class="s-count">' + profileData.statuses_count + '</span></li>') : '') +
-                                                            (profileData.friends_count ? ('<li>Following<br /><span class="s-count">' + profileData.friends_count + '</span></li>') : '') +
-                                                            (profileData.followers_count ? ('<li>Followers<br /><span class="s-count">' + profileData.followers_count + '</span></li>') : '') +
-                                                        '</ul>' +
-                                                    '</div>';
-                            };
-                            loadingHTML = 'Contacting Twitter...';
-                            errorHTML = 'Invalid username or you have exceeded Twitter request limit.<br/><small>Please note, Twitter only allows 150 requests per hour.</small>';
-                            customCallback = function () { };
-
-                            curHCDetails.append('<span class="s-action"><a href="https://twitter.com/' + username + '" data-show-count="false" data-button="grey" data-width="65px" class="twitter-follow-button">Follow</a></span>');
-
-                            if (typeof twttr === 'undefined') {
-                                // Append the twitter script to the document to add a follow button
+                    break;
+                case "facebook":
+                    {
+                        urlToRequest = 'https://graph.facebook.com/' + username,
+                        cardHTML = function (profileData) {
+                            return '<div class="s-card s-card-pad">' +
+                                    '<img class="s-img" src="http://graph.facebook.com/' + profileData.id + '/picture" />' +
+                                    '<label class="s-name">' + profileData.name + ' </label><br/>' +
+                                    (profileData.link ? ('<a class="s-loc" href="' + profileData.link + '">' + profileData.link + '</a><br/>') : '') +
+                                    (profileData.likes ? ('<label class="s-loc">Liked by </span> ' + profileData.likes + '</label><br/>') : '') +
+                                    (profileData.description ? ('<p class="s-desc">' + profileData.description + '</p>') : '') +
+                                    (profileData.start_time ? ('<p class="s-desc"><span class="s-strong">Start Time:</span><br/>' + profileData.start_time + '</p>') : '') +
+                                    (profileData.end_time ? ('<p class="s-desc"><span class="s-strong">End Time:<br/>' + profileData.end_time + '</p>') : '') +
+                                    (profileData.founded ? ('<p class="s-desc"><span class="s-strong">Founded:</span><br/>' + profileData.founded + '</p>') : '') +
+                                    (profileData.mission ? ('<p class="s-desc"><span class="s-strong">Mission:</span><br/>' + profileData.mission + '</p>') : '') +
+                                    (profileData.company_overview ? ('<p class="s-desc"><span class="s-strong">Overview:</span><br/>' + profileData.company_overview + '</p>') : '') +
+                                    (profileData.products ? ('<p class="s-desc"><span class="s-strong">Products:</span><br/>' + profileData.products + '</p>') : '') +
+                                    (profileData.website ? ('<p class="s-desc"><span class="s-strong">Web:</span><br/><a href="' + profileData.website + '">' + profileData.website + '</a></p>') : '') +
+                                    (profileData.email ? ('<p class="s-desc"><span class="s-strong">Email:</span><br/><a href="' + profileData.email + '">' + profileData.email + '</a></p>') : '') +
+                                    '</div>';
+                        };
+                        loadingHTML = "Contacting Facebook...";
+                        errorHTML = "The requested user, page, or event could not be found. Please try a different one.";
+                        customCallback = function (profileData) {
+                            //Append the twitter script to the document to add a follow button
+                            if ($('#fb-like-script').length <= 0) {
                                 var script = document.createElement('script');
                                 script.type = 'text/javascript';
-                                script.src = '//platform.twitter.com/widgets.js';
-                                script.id = 't-follow-script';
-                                $('body').append(script);
-                            } else {
-                                // tell twttr to rescan for follow buttons
-                                twttr.widgets.load();
+                                script.text = '(function(d, s, id) {' +
+                                          'var js, fjs = d.getElementsByTagName(s)[0];' +
+                                          'if (d.getElementById(id)) {return;}' +
+                                          'js = d.createElement(s); js.id = id;' +
+                                          'js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=140270912730552";' +
+                                          'fjs.parentNode.insertBefore(js, fjs);' +
+                                        '}(document, "script", "facebook-jssdk"));';
+                                script.id = 'fb-like-script';
+                                $('body').prepend(script);
+                                $('body').prepend('<div id="fb-root"></div>');
                             }
+                            curHCDetails.append('<span class="s-action"><div class="fb-like" data-href="' + profileData.link + '" data-send="false" data-layout="button_count" data-width="90" data-show-faces="false"></div></span>');
                         }
-                        break;
-                    case "facebook":
-                        {
-                            urlToRequest = 'https://graph.facebook.com/' + username,
-                            cardHTML = function (profileData) {
-                                return '<div class="s-card s-card-pad">' +
-                                        '<img class="s-img" src="http://graph.facebook.com/' + profileData.id + '/picture" />' +
-                                        '<label class="s-name">' + profileData.name + ' </label><br/>' +
-                                        (profileData.link ? ('<a class="s-loc" href="' + profileData.link + '">' + profileData.link + '</a><br/>') : '') +
-                                        (profileData.likes ? ('<label class="s-loc">Liked by </span> ' + profileData.likes + '</label><br/>') : '') +
-                                        (profileData.description ? ('<p class="s-desc">' + profileData.description + '</p>') : '') +
-                                        (profileData.start_time ? ('<p class="s-desc"><span class="s-strong">Start Time:</span><br/>' + profileData.start_time + '</p>') : '') +
-                                        (profileData.end_time ? ('<p class="s-desc"><span class="s-strong">End Time:<br/>' + profileData.end_time + '</p>') : '') +
-                                        (profileData.founded ? ('<p class="s-desc"><span class="s-strong">Founded:</span><br/>' + profileData.founded + '</p>') : '') +
-                                        (profileData.mission ? ('<p class="s-desc"><span class="s-strong">Mission:</span><br/>' + profileData.mission + '</p>') : '') +
-                                        (profileData.company_overview ? ('<p class="s-desc"><span class="s-strong">Overview:</span><br/>' + profileData.company_overview + '</p>') : '') +
-                                        (profileData.products ? ('<p class="s-desc"><span class="s-strong">Products:</span><br/>' + profileData.products + '</p>') : '') +
-                                        (profileData.website ? ('<p class="s-desc"><span class="s-strong">Web:</span><br/><a href="' + profileData.website + '">' + profileData.website + '</a></p>') : '') +
-                                        (profileData.email ? ('<p class="s-desc"><span class="s-strong">Email:</span><br/><a href="' + profileData.email + '">' + profileData.email + '</a></p>') : '') +
-                                        '</div>';
-                            };
-                            loadingHTML = "Contacting Facebook...";
-                            errorHTML = "The requested user, page, or event could not be found. Please try a different one.";
-                            customCallback = function (profileData) {
-                                //Append the twitter script to the document to add a follow button
-                                if ($('#fb-like-script').length <= 0) {
-                                    var script = document.createElement('script');
-                                    script.type = 'text/javascript';
-                                    script.text = '(function(d, s, id) {' +
-                                              'var js, fjs = d.getElementsByTagName(s)[0];' +
-                                              'if (d.getElementById(id)) {return;}' +
-                                              'js = d.createElement(s); js.id = id;' +
-                                              'js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=140270912730552";' +
-                                              'fjs.parentNode.insertBefore(js, fjs);' +
-                                            '}(document, "script", "facebook-jssdk"));';
-                                    script.id = 'fb-like-script';
-                                    $('body').prepend(script);
-                                    $('body').prepend('<div id="fb-root"></div>');
-                                }
-                                curHCDetails.append('<span class="s-action"><div class="fb-like" data-href="' + profileData.link + '" data-send="false" data-layout="button_count" data-width="90" data-show-faces="false"></div></span>');
-                            }
-                        }
-                        break;
-                    case "custom":
-                        {
-                            urlToRequest = username,
-                            cardHTML = function (profileData) {
-                                return '<div class="s-card s-card-pad">' +
-                                        (profileData.image ? ('<img class="s-img" src=' + profileData.image + ' />') : '') +
-                                        (profileData.name ? ('<label class="s-name">' + profileData.name + ' </label><br/>') : '') +
-                                        (profileData.link ? ('<a class="s-loc" href="' + profileData.link + '">' + profileData.link + '</a><br/>') : '') +
-                                        (profileData.bio ? ('<p class="s-desc">' + profileData.bio + '</p>') : '') +
-                                        (profileData.website ? ('<p class="s-desc"><span class="s-strong">Web:</span><br/><a href="' + profileData.website + '">' + profileData.website + '</a></p>') : '') +
-                                        (profileData.email ? ('<p class="s-desc"><span class="s-strong">Email:</span><br/><a href="' + profileData.email + '">' + profileData.email + '</a></p>') : '') +
-                                        '</div>';
-                            };
-                            loadingHTML = "Loading...";
-                            errorHTML = "Sorry, no data found.";
-                            customCallback = function () { };
-                        }
-                        break;
-                    default: { } break;
-                }
+                    }
+                    break;
+                case "custom":
+                    {
+                        urlToRequest = username,
+                        cardHTML = function (profileData) {
+                            return '<div class="s-card s-card-pad">' +
+                                    (profileData.image ? ('<img class="s-img" src=' + profileData.image + ' />') : '') +
+                                    (profileData.name ? ('<label class="s-name">' + profileData.name + ' </label><br/>') : '') +
+                                    (profileData.link ? ('<a class="s-loc" href="' + profileData.link + '">' + profileData.link + '</a><br/>') : '') +
+                                    (profileData.bio ? ('<p class="s-desc">' + profileData.bio + '</p>') : '') +
+                                    (profileData.website ? ('<p class="s-desc"><span class="s-strong">Web:</span><br/><a href="' + profileData.website + '">' + profileData.website + '</a></p>') : '') +
+                                    (profileData.email ? ('<p class="s-desc"><span class="s-strong">Email:</span><br/><a href="' + profileData.email + '">' + profileData.email + '</a></p>') : '') +
+                                    '</div>';
+                        };
+                        loadingHTML = "Loading...";
+                        errorHTML = "Sorry, no data found.";
+                        customCallback = function () { };
+                    }
+                    break;
+                default: { } break;
+            }
 
-                if ($.isEmptyObject(customCardJSON)) {
-                    $.ajax({
-                        url: urlToRequest,
-                        type: 'GET',
-                        dataType: 'jsonp', //jsonp for cross domain request
-                        timeout: 4000, //timeout if cross domain request didn't respond, or failed silently
-                        beforeSend: function () {
-                            curHCDetails.find('.s-message').remove();
-                            curHCDetails.append('<p class="s-message">' + loadingHTML + '</p>');
-                        },
-                        success: function (data) {
-                            if (data.length <= 0) {
-                                curHCDetails.find('.s-message').html(errorHTML);
-                            }
-                            else {
-                                curHCDetails.find('.s-message').remove();
-                                curHCDetails.prepend(cardHTML(data));
-                                adjustToViewPort(curHCDetails.closest('.hc-preview'));
-                                curHCDetails.stop(true, true).delay(options.delay).fadeIn();
-                                customCallback(data);
-                            }
-                        },
-                        error: function (jqXHR, textStatus, errorThrown) {
+            if ($.isEmptyObject(customCardJSON)) {
+                $.ajax({
+                    url: urlToRequest,
+                    type: 'GET',
+                    dataType: 'jsonp', //jsonp for cross domain request
+                    timeout: 4000, //timeout if cross domain request didn't respond, or failed silently
+                    beforeSend: function () {
+                        curHCDetails.find('.s-message').remove();
+                        curHCDetails.append('<p class="s-message">' + loadingHTML + '</p>');
+                    },
+                    success: function (data) {
+                        if (data.length <= 0) {
                             curHCDetails.find('.s-message').html(errorHTML);
                         }
-                    });
-                }
-                else {
-                    curHCDetails.prepend(cardHTML(customCardJSON));
-                }
-                $.data(curHCDetails[0], 'hc_loaded', true);
-            };
+                        else {
+                            curHCDetails.find('.s-message').remove();
+                            curHCDetails.prepend(cardHTML(data));
+                            adjustToViewPort(curHCDetails.closest('.hc-preview'));
+                            curHCDetails.stop(true, true).delay(options.delay).fadeIn();
+                            customCallback(data);
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        curHCDetails.find('.s-message').html(errorHTML);
+                    }
+                });
+            }
+            else {
+                curHCDetails.prepend(cardHTML(customCardJSON));
+            }
+            $.data(curHCDetails[0], 'hc_loaded', true);
         };
+    };
 })(jQuery);
