@@ -1,3 +1,9 @@
+# Copyright (c) 2012 Taher Haveliwala
+# All Rights Reserved
+#
+# See LICENSE for licensing
+#
+
 from django.http import *
 from django.shortcuts import render, redirect
 from django.contrib.auth import logout as django_logout

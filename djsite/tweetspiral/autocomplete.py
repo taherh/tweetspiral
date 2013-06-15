@@ -1,3 +1,9 @@
+# Copyright (c) 2012 Taher Haveliwala
+# All Rights Reserved
+#
+# See LICENSE for licensing
+#
+
 import bisect
 
 class AutocompleteEngine(object):

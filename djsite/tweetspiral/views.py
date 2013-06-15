@@ -1,3 +1,9 @@
+# Copyright (c) 2012 Taher Haveliwala
+# All Rights Reserved
+#
+# See LICENSE for licensing
+#
+
 import json
 from django.conf import settings
 from django.shortcuts import render, redirect

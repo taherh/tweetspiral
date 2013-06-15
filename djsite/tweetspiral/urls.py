@@ -1,3 +1,9 @@
+# Copyright (c) 2012 Taher Haveliwala
+# All Rights Reserved
+#
+# See LICENSE for licensing
+#
+
 from django.conf.urls.defaults import *
 from . import views
 

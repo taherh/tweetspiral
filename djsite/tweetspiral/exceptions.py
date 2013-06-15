@@ -1,3 +1,8 @@
+# Copyright (c) 2012 Taher Haveliwala
+# All Rights Reserved
+#
+# See LICENSE for licensing
+#
 
 class FakeError(Exception):
     pass
