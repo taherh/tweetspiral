@@ -1,4 +1,5 @@
 *~
+*.komodoproject
 *.log
 *.pot
 *.pyc

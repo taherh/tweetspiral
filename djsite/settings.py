@@ -13,13 +13,6 @@ if _lib_path not in sys.path:
 
 TEMPLATE_DEBUG = DEBUG
 
-ADMINS = (
-    # ('Your Name', 'your_email@domain.com'),
-    ('Taher Haveliwala', 'th@aquva.com')
-)
-
-MANAGERS = ADMINS
-
 SEND_BROKEN_LINK_EMAILS = False
 
 DATABASES = {
