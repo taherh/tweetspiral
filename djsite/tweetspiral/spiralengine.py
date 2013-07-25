@@ -23,7 +23,7 @@ class SpiralEngine(object):
     logged_in = False
     ac_engine = None
     
-    def __init__(self, request, ac_engine):
+    def __init__(self, request, ac_engine, raw_api=False):
         '''Initialize spiral engine request and authenticate if applicable'''
 
         self.logged_in = False
@@ -31,6 +31,12 @@ class SpiralEngine(object):
 
         auth = None
 
+        parser = None
+        cache_prefix = None
+        if raw_api:
+            parser = tweepy.parsers.RawParser()
+            cache_prefix = 'RAW__'
+            
         # check if we have a login token
         access_token = request.session.get('access_token_tw', None)
         access_token_secret = request.session.get('access_token_secret_tw', None)    
@@ -45,13 +51,16 @@ class SpiralEngine(object):
         elif settings.API_CACHE == 'file':
             cache = tweepy.FileCache(cache_dir=settings.API_FILE_CACHE_PATH,
                                      timeout=settings.API_CACHE_TIMEOUT)
-        elif settings.API_CACHE == 'redis':
-            cache = tweepy.RedisCache(redis.StrictRedis(),
-                                      timeout=settings.API_CACHE_TIMEOUT)
+#        elif settings.API_CACHE == 'redis':
+#            cache = tweepy.RedisCache(redis.StrictRedis(),
+#                                      timeout=settings.API_CACHE_TIMEOUT)
         else:
             cache = None
     
-        self.api = tweepy.API(auth, cache=cache, secure=True)
+        self.api = tweepy.API(auth, cache=cache, cache_prefix=cache_prefix,
+                              secure=True,
+                              parser=parser,
+                              bearer_token=settings.TWITTER_BEARER_TOKEN)
     
     def process(self, command, req_data):
         '''Processes `command`
@@ -69,10 +78,10 @@ class SpiralEngine(object):
             raise FakeError("trigger_error: %s" % req_data['trigger_error'])
         
         # check to see if we've exceeded twitter rate limit
-        print("rate_limit_status: %d" % self.api.rate_limit_status()['remaining_hits'])
-        if self.api.rate_limit_status()['remaining_hits'] < 10 or \
-           req_data['trigger_rate_limit']:
-            raise(RateLimitError(logged_in=self.logged_in))
+#        print("rate_limit_status: %d" % self.api.rate_limit_status()['remaining_hits'])
+#        if self.api.rate_limit_status()['remaining_hits'] < 10 or \
+#           req_data['trigger_rate_limit']:
+#            raise(RateLimitError(logged_in=self.logged_in))
         
         if len(req_data['twitter_handles']) > 100:
             print('query length exceeded')
@@ -245,8 +254,8 @@ class SpiralEngine(object):
         for user in users[0:limit]:
             try:
                 statuses.extend(zip(self.api.user_timeline(
-                    screen_name=user.screen_name, count=10, include_rts=True,
-                    include_entities=True, trim_user=True, skip_cache_write=user.protected),
+                                        screen_name=user.screen_name, count=10,
+                                        trim_user=True, skip_cache_write=user.protected),
                                     repeat(user.followers_count)))
             except tweepy.TweepError as e:
                 print("TweepError: %s" % e)

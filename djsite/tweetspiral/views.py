@@ -89,6 +89,21 @@ def autocomplete(request):
     return http.HttpResponse(
         content, content_type='application/json')
 
+def users_lookup(request):
+    '''Proxy for twitter api 1.1 'users/lookup' necessary for server-side
+       authentication for jquery.hovercard client code'''
+
+    content = {}
+    if request.method == 'GET' and len(request.GET) > 0:
+        # raw_api=True will tell the api to pass back raw, unparsed results that
+        # we can return directly
+        spiral_engine = SpiralEngine(request, AutocompleteEngine(request), raw_api=True)
+        content = spiral_engine.api.lookup_users(screen_names=request.GET['screen_name'].split(','))
+        
+    return http.HttpResponse(
+        content, content_type='application/json'
+    )
+
 class SpiralErrorView(TemplateView):
     def get_context_data(self, *args, **kwargs):
         context = super(SpiralErrorView, self).get_context_data(*args, **kwargs)

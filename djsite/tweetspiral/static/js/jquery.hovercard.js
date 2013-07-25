@@ -251,7 +251,7 @@
             switch (type) {
                 case "twitter":
                     {
-                        urlToRequest = 'http://api.twitter.com/1/users/lookup.json?screen_name=' + username;
+                        urlToRequest = '/users_lookup.json?screen_name=' + username;
                         cardHTML = function (profileData) {
                             profileData = profileData[0];
                             return '<div class="s-card s-card-pad">' +
@@ -355,7 +355,7 @@
                 $.ajax({
                     url: urlToRequest,
                     type: 'GET',
-                    dataType: 'jsonp', //jsonp for cross domain request
+                    dataType: 'json', //jsonp for cross domain request
                     timeout: 4000, //timeout if cross domain request didn't respond, or failed silently
                     beforeSend: function () {
                         curHCDetails.find('.s-message').remove();

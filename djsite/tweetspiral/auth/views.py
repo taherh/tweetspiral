@@ -19,7 +19,7 @@ def login(request):
     callback = request.build_absolute_uri(reverse('callback'))
     oauth = tweepy.OAuthHandler(settings.TWITTER_CONSUMER_KEY,
                                 settings.TWITTER_CONSUMER_SECRET,
-                                callback=callback)
+                                callback=callback, secure=True)
     auth_url = oauth.get_authorization_url(False)
     request.session['request_token_tw'] = (oauth.request_token.key,
                                            oauth.request_token.secret)
@@ -28,7 +28,8 @@ def login(request):
 def callback(request):
     verifier = request.GET.get('oauth_verifier')
     oauth = tweepy.OAuthHandler(settings.TWITTER_CONSUMER_KEY,
-                                settings.TWITTER_CONSUMER_SECRET)
+                                settings.TWITTER_CONSUMER_SECRET,
+                                callback=None, secure=True)
     token = request.session.get('request_token_tw', None)
     # remove the request token now we don't need it
     request.session.delete('request_token_tw')

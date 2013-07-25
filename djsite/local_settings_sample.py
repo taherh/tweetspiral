@@ -22,9 +22,15 @@ DATABASES = {
     }
 }
 
+API_CACHE = 'file'  # 'memory' or 'file'
+API_FILE_CACHE_PATH = '/srv/cache/tweepy/'
+API_CACHE_TIMEOUT = 259200  # 4 days
+
 SECRET_KEY = ''
 
 # The consumer keys can be found on your application's Details                                                             
 # page located at https://dev.twitter.com/apps (under "OAuth settings")                                                    
 TWITTER_CONSUMER_KEY=""
 TWITTER_CONSUMER_SECRET=""
+# You can generate a bearer token using https://github.com/taherh/twitter_application_auth
+TWITTER_BEARER_TOKEN=""
