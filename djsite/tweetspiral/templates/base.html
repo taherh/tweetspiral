@@ -32,7 +32,7 @@
 
     <p class="tagline">Find interesting people to follow on Twitter.</p>
     {% include "panels/login_profile.html" with me=me only %}
-    
+    {% include "macros/github_ribbon.html" %}
     {% block query %}{% endblock %}
     {% block results %}{% endblock %}
     {% block message %}{% endblock %}
