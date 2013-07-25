@@ -41,6 +41,7 @@ def bind_api(**config):
             self.retry_delay = kargs.pop('retry_delay', api.retry_delay)
             self.retry_errors = kargs.pop('retry_errors', api.retry_errors)
             self.headers = kargs.pop('headers', {})
+            self.skip_cache_write = kargs.pop('skip_cache_write', False)
             self.build_parameters(args, kargs)
 
             # Pick correct URL root to use
@@ -112,7 +113,7 @@ def bind_api(**config):
             # Query the cache if one is available
             # and this request uses a GET method.
             if self.use_cache and self.api.cache and self.method == 'GET':
-                cache_result = self.api.cache.get(url)
+                cache_result = self.api.cache.get(self.api.cache_key(url))
                 # if cache result found and not expired, return it
                 if cache_result:
                     # must restore api reference
@@ -135,12 +136,14 @@ def bind_api(**config):
                 else:
                     conn = httplib.HTTPConnection(self.host, timeout=self.api.timeout)
 
-                # Apply authentication
+                # Apply authentication (either logged-in user or application-only auth)
                 if self.api.auth:
                     self.api.auth.apply_auth(
                             self.scheme + self.host + url,
                             self.method, self.headers, self.parameters
                     )
+                elif self.api.bearer_token:
+                    self.headers['Authorization'] = b'Bearer ' + self.api.bearer_token
 
                 # Request compression if configured
                 if self.api.compression:
@@ -185,8 +188,8 @@ def bind_api(**config):
             conn.close()
 
             # Store result into cache if one is available.
-            if self.use_cache and self.api.cache and self.method == 'GET' and result:
-                self.api.cache.store(url, result)
+            if self.use_cache and not self.skip_cache_write and self.api.cache and self.method == 'GET' and result:
+                self.api.cache.store(self.api.cache_key(url), result)
 
             return result
 

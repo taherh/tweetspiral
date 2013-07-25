@@ -95,7 +95,7 @@ class OAuthHandler(AuthHandler):
             else:
                 url = self._get_oauth_url('authorize')
             request = oauth.OAuthRequest.from_token_and_callback(
-                token=self.request_token, http_url=url
+                token=self.request_token, http_url=url, callback=self.callback
             )
 
             return request.to_url()

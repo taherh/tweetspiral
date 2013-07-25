@@ -18,7 +18,7 @@ class API(object):
             host='api.twitter.com', search_host='search.twitter.com',
              cache=None, secure=True, api_root='/1.1', search_root='',
             retry_count=0, retry_delay=0, retry_errors=None, timeout=60,
-            parser=None, compression=False):
+            parser=None, compression=False, bearer_token=None, cache_prefix=None):
         self.auth = auth_handler
         self.host = host
         self.search_host = search_host
@@ -32,6 +32,8 @@ class API(object):
         self.retry_errors = retry_errors
         self.timeout = timeout
         self.parser = parser or ModelParser()
+        self.cache_prefix = cache_prefix
+        self.bearer_token = bearer_token
 
     """ statuses/home_timeline """
     home_timeline = bind_api(
@@ -46,7 +48,7 @@ class API(object):
         path = '/statuses/user_timeline.json',
         payload_type = 'status', payload_list = True,
         allowed_param = ['id', 'user_id', 'screen_name', 'since_id',
-                          'max_id', 'count', 'include_rts']
+                          'max_id', 'count', 'include_rts', 'trim_user']
     )
 
     """ statuses/mentions """
@@ -715,4 +717,11 @@ class API(object):
         }
 
         return headers, body
+
+    '''Used to create cache key (needed to separate entries for different result parsers)'''
+    def cache_key(self, url):
+        if self.cache_prefix:
+            return self.cache_prefix+url
+        return url
+
 
