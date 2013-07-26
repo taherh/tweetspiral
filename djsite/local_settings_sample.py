@@ -22,6 +22,10 @@ DATABASES = {
     }
 }
 
+# Hosts/domain names that are valid for this site; **REQUIRED** if DEBUG is False
+# See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
+ALLOWED_HOSTS = [ 'localhost' ]  # set to your hostname
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
