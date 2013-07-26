@@ -22,6 +22,35 @@ DATABASES = {
     }
 }
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue'
+        }
+    },
+    'handlers': {
+        'console': {
+            'level': 'INFO',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+        }
+    },
+    'loggers': {
+        'tweepy': {
+            'handlers': ['console'],
+                'level': 'WARNING',
+                'propagate': False,
+        },
+        'tweetspiral': {
+            'handlers': ['console'],
+                'level': 'WARNING',
+                'propagate': False,            
+        }
+    }
+}
+
 API_CACHE = 'redis'  # 'memory', 'file', or 'redis'
 API_FILE_CACHE_PATH = '/srv/cache/tweepy/'
 API_CACHE_TIMEOUT = 259200  # 4 days

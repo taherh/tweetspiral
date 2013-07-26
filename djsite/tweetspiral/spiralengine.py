@@ -11,11 +11,14 @@ from collections import defaultdict
 from django.conf import settings
 from itertools import repeat
 from pprint import pprint
+import logging
 
 import redis
 import tweepy
 from .autocomplete import AutocompleteEngine
 from .exceptions import *
+
+logger = logging.getLogger(__name__)
 
 class SpiralEngine(object):
     '''Per-request handler for tweetspiral webapp requests'''
@@ -84,7 +87,7 @@ class SpiralEngine(object):
 #            raise(RateLimitError(logged_in=self.logged_in))
         
         if len(req_data['twitter_handles']) > 100:
-            print('query length exceeded')
+            logger.warning('query length exceeded')
             result['msgs'] = 'Query length exceeded.'
             return result
 
@@ -172,8 +175,8 @@ class SpiralEngine(object):
         for input_user in input_users:
             try:
                 rel_id_set = set(lookup_fn(user=input_user))
-            except tweepy.TweepError as e:
-                print("TweepError: %s" % e)
+            except tweepy.TweepError:
+                logger.exception("lookup exception")
                 continue
             
             if overlap_id_set is None:
@@ -186,7 +189,7 @@ class SpiralEngine(object):
             return []
         
         overlap_ids = sorted(overlap_id_set)
-        users = self.lookup_users(user_ids=overlap_ids, limit=1000)
+        users = self.lookup_users(user_ids=overlap_ids, limit=500)
     
         # sort by followers_count
         users.sort(key=lambda user: user.followers_count, reverse=True)
@@ -227,17 +230,17 @@ class SpiralEngine(object):
             try:
                 users.extend(
                     self.api.lookup_users(user_ids=user_ids[start:start+step]))
-            except Exception:
-                pass
+            except TweepError:
+                logging.exception("lookup_users exception")
 
         stop = min(len(screen_names), limit)
         for start in range(0, stop, step):
             try:
                 users.extend(
                     self.api.lookup_users(screen_names=screen_names[start:start+step]))
-            except Exception:
-                pass
-        
+            except TweepError:
+                logging.exception("lookup_users exception")
+
         return users
     
     def get_statuses(self, users, limit=25):
@@ -257,8 +260,8 @@ class SpiralEngine(object):
                                         screen_name=user.screen_name, count=10,
                                         trim_user=True, skip_cache_write=user.protected),
                                     repeat(user.followers_count)))
-            except tweepy.TweepError as e:
-                print("TweepError: %s" % e)
+            except tweepy.TweepError:
+                logger.exception("user_timeline exception")
         return statuses
     
     def detect_entities(self, statuses, limit = 100):

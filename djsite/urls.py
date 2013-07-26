@@ -4,7 +4,7 @@
 # See LICENSE for licensing
 #
 
-from django.conf.urls.defaults import *
+from django.conf.urls import *
 from . import views
 
 # Uncomment the next two lines to enable the admin:

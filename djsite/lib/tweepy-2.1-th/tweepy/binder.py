@@ -8,6 +8,7 @@ import time
 import re
 from StringIO import StringIO
 import gzip
+import logging
 
 from tweepy.error import TweepError
 from tweepy.utils import convert_to_utf8_str
@@ -15,6 +16,7 @@ from tweepy.models import Model
 
 re_path_template = re.compile('{\w+}')
 
+logger = logging.getLogger(__name__)
 
 def bind_api(**config):
 
