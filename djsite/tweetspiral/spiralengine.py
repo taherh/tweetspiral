@@ -51,9 +51,9 @@ class SpiralEngine(object):
         elif settings.API_CACHE == 'file':
             cache = tweepy.FileCache(cache_dir=settings.API_FILE_CACHE_PATH,
                                      timeout=settings.API_CACHE_TIMEOUT)
-#        elif settings.API_CACHE == 'redis':
-#            cache = tweepy.RedisCache(redis.StrictRedis(),
-#                                      timeout=settings.API_CACHE_TIMEOUT)
+        elif settings.API_CACHE == 'redis':
+            cache = tweepy.RedisCache(redis.StrictRedis(),
+                                      timeout=settings.API_CACHE_TIMEOUT)
         else:
             cache = None
     

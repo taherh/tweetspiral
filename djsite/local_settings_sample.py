@@ -22,7 +22,7 @@ DATABASES = {
     }
 }
 
-API_CACHE = 'file'  # 'memory' or 'file'
+API_CACHE = 'redis'  # 'memory', 'file', or 'redis'
 API_FILE_CACHE_PATH = '/srv/cache/tweepy/'
 API_CACHE_TIMEOUT = 259200  # 4 days
 
