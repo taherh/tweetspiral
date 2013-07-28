@@ -260,7 +260,7 @@
                                                     (profileData.screen_name ? ('(<a class="s-username" title="Visit Twitter profile for ' + profileData.name + '" href="http://twitter.com/' + profileData.screen_name + '">@' + profileData.screen_name + '</a>)<br/>') : '') +
                                                     (profileData.location ? ('<label class="s-loc">' + profileData.location + '</label>') : '') +
                                                     (profileData.description ? ('<p class="s-desc">' + profileData.description + '</p>') : '') +
-                                                    (profileData.url ? ('<a class="s-href" href="' + profileData.url + '">' + profileData.url + '</a><br/>') : '') +
+                                                    (profileData.url ? ('<a class="s-href" href="' + profileData.entities.url.urls[0].expanded_url + '">' + profileData.entities.url.urls[0].display_url + '</a><br/>') : '') +
 
                                                     '<ul class="s-stats">' +
                                                         (profileData.statuses_count ? ('<li>Tweets<br /><span class="s-count">' + profileData.statuses_count + '</span></li>') : '') +
