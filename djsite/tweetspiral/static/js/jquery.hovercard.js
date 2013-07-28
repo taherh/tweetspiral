@@ -254,12 +254,20 @@
                         urlToRequest = '/users_lookup.json?screen_name=' + username;
                         cardHTML = function (profileData) {
                             profileData = profileData[0];
+                            // expand any shortened urls in the description
+                            desc = profileData.description;
+                            desc_urls = profileData.entities.description.urls;
+                            for (i = 0; i < desc_urls.length; i++) {
+                                desc = desc.replace(desc_urls[i].url,
+                                                    "<a href='" + desc_urls[i].expanded_url + "'>" + desc_urls[i].display_url + "</a>");
+                            }
+                            // return hovercard
                             return '<div class="s-card s-card-pad">' +
                                                     (profileData.profile_image_url ? ('<img class="s-img" src="' + profileData.profile_image_url + '" />') : '') +
                                                     (profileData.name ? ('<label class="s-name">' + profileData.name + ' </label>') : '') +
                                                     (profileData.screen_name ? ('(<a class="s-username" title="Visit Twitter profile for ' + profileData.name + '" href="http://twitter.com/' + profileData.screen_name + '">@' + profileData.screen_name + '</a>)<br/>') : '') +
                                                     (profileData.location ? ('<label class="s-loc">' + profileData.location + '</label>') : '') +
-                                                    (profileData.description ? ('<p class="s-desc">' + profileData.description + '</p>') : '') +
+                                                    (profileData.description ? ('<p class="s-desc">' + desc + '</p>') : '') +
                                                     (profileData.url ? ('<a class="s-href" href="' + profileData.entities.url.urls[0].expanded_url + '">' + profileData.entities.url.urls[0].display_url + '</a><br/>') : '') +
 
                                                     '<ul class="s-stats">' +
