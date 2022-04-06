@@ -7,8 +7,8 @@
 from django.conf.urls import *
 from . import views
 
-urlpatterns = patterns('',
+urlpatterns = [
     url(r'^login$', views.login, name='login'),
     url(r'^callback$', views.callback, name='callback'),
     url(r'^logout$', views.logout, name='logout')
-)
+]

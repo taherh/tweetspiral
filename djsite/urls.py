@@ -11,7 +11,7 @@ from . import views
 # from django.contrib import admin
 # admin.autodiscover()
 
-urlpatterns = patterns('',
+urlpatterns = [
     (r'', include('djsite.tweetspiral.urls'))
     # Example:
     # (r'^djsite/', include('djsite.foo.urls')),
@@ -21,4 +21,4 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     # (r'^admin/', include(admin.site.urls)),
-)
+]

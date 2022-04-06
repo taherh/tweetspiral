@@ -7,7 +7,7 @@
 from django.conf.urls import *
 from . import views
 
-urlpatterns = patterns('',
+urlpatterns = [
     url(r'^$', views.spiral, name='home'),
     url(r'^analyze', views.spiral, name='analyze'),
     url(r'^rate_limit', views.RateLimitErrorView.as_view(), name='rate_limit_error'),
@@ -15,4 +15,4 @@ urlpatterns = patterns('',
     url(r'^autocomplete.json', views.autocomplete, name='autocomplete'),
     url(r'^users_lookup.json', views.users_lookup, name='users_lookup'),
     (r'^auth/', include('djsite.tweetspiral.auth.urls'))
-)
+]
