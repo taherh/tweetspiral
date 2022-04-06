@@ -14,5 +14,5 @@ urlpatterns = [
     url(r'^error', views.GeneralErrorView.as_view(), name='error'),
     url(r'^autocomplete.json', views.autocomplete, name='autocomplete'),
     url(r'^users_lookup.json', views.users_lookup, name='users_lookup'),
-    (r'^auth/', include('djsite.tweetspiral.auth.urls'))
+    url(r'^auth/', include('djsite.tweetspiral.auth.urls'))
 ]

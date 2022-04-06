@@ -12,7 +12,7 @@ from . import views
 # admin.autodiscover()
 
 urlpatterns = [
-    (r'', include('djsite.tweetspiral.urls'))
+    url(r'', include('djsite.tweetspiral.urls'))
     # Example:
     # (r'^djsite/', include('djsite.foo.urls')),
 
