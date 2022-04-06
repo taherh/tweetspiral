@@ -4,10 +4,15 @@ import socket
 
 DEBUG = False
 
+ALLOWED_HOSTS = []
+
+
+# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+print(BASE_DIR)
 # We install custom python libs in lib/.  Prepend to sys.path to allow
 # overriding of any installed libs
-_proj_path = os.path.dirname(__file__)
-_lib_path = _proj_path + "/lib"
+_lib_path = BASE_DIR + "/lib"
 if _lib_path not in sys.path:
     sys.path.insert(0, _lib_path)
 
@@ -69,21 +74,26 @@ ADMIN_MEDIA_PREFIX = '/media/'
 # Make this unique, and don't share it with anybody.  (set this in local_settings)
 SECRET_KEY = ''
 
-# List of callables that know how to import templates from various sources.
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
-)
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [
+            BASE_DIR + "djsite/templates",
+            BASE_DIR + "djsite/tweetspiral/templates",
+        ],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
 
-TEMPLATE_CONTEXT_PROCESSORS = (
-    'django.core.context_processors.debug',
-    'django.core.context_processors.i18n',
-    'django.core.context_processors.media',
-    'django.core.context_processors.static',
-    'django.contrib.auth.context_processors.auth',
-    'django.contrib.messages.context_processors.messages',
-)
+#WSGI_APPLICATION = 'djsite.wsgi.application'
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
@@ -94,14 +104,6 @@ MIDDLEWARE_CLASSES = (
 )
 
 ROOT_URLCONF = 'djsite.urls'
-
-TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
-    os.path.dirname(os.path.abspath(__file__)) + "/templates",
-    os.path.dirname(os.path.abspath(__file__)) + "/tweetspiral/templates"
-)
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -123,7 +125,7 @@ LOGOUT_ON_ERROR = True
 
 # Keep passwords/keys in local_settings.py
 try:
-    from local_settings import *
+    from djsite.local_settings import *
 except ImportError:
     print("Couldn't import local_settings")
 
