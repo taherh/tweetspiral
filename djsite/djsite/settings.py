@@ -9,7 +9,7 @@ ALLOWED_HOSTS = []
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-print(BASE_DIR)
+
 # We install custom python libs in lib/.  Prepend to sys.path to allow
 # overriding of any installed libs
 _lib_path = BASE_DIR + "/lib"
