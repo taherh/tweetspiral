@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    {% load static%}
     {% if not command %}
       <title>TweetSpiral</title>
     {% else %}
@@ -12,22 +13,22 @@
 
     <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Lobster+Two:400,400italic,700italic,700">
       
-    <link href="{{STATIC_URL}}css/base.css" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/base.css' %}" rel="stylesheet" type="text/css">
     <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/ui-lightness/jquery-ui.css" rel="stylesheet" type="text/css">
   
-    <link rel="shortcut icon" href="{{STATIC_URL}}img/icon.png">
+    <link rel="shortcut icon" href="{% static 'img/icon.png' %}">
   
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js"></script>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.js"></script>
-    <script type="text/javascript" src="{{STATIC_URL}}js/jquery.hovercard.js"></script>
-    <script type="text/javascript" src="{{STATIC_URL}}js/jquery-ui.triggeredAutocomplete.js"></script>
-    <script type="text/javascript" src="{{STATIC_URL}}js/tweetspiral.js"></script>
+    <script type="text/javascript" src="{% static 'js/jquery.hovercard.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery-ui.triggeredAutocomplete.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/tweetspiral.js' %}"></script>
     
     {% include "macros/google_analytics.html" only %}
   </head>
   
   <body>
-    <div class="logo"><a href="{{home}}"><img alt="TweetSpiral" src="{{STATIC_URL}}img/logo.png"></a></div>
+    <div class="logo"><a href="{{home}}"><img alt="TweetSpiral" src="{% static 'img/logo.png' %}"></a></div>
     {% include "macros/follow_button.html" with screen_name="TweetSpiral" show_screen_name="true" only %}
 
     <p class="tagline">Find interesting people to follow on Twitter.</p>

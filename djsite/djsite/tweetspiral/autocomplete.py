@@ -13,7 +13,7 @@ class AutocompleteEngine(object):
         self.request = request
     
     def add_suggestions(self, terms):
-        if isinstance(terms, basestring):
+        if isinstance(terms, str):
             terms = [terms]
             
         all_names = self.request.session.get('ac_screen_names', [])

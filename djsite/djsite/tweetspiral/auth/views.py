@@ -7,7 +7,7 @@
 from django.http import *
 from django.shortcuts import render, redirect
 from django.contrib.auth import logout as django_logout
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.conf import settings
 import tweepy
 
@@ -38,7 +38,7 @@ def callback(request):
     try:
     	oauth.get_access_token(verifier)
     except tweepy.TweepError:
-    	print 'Error, failed to get access token'
+        print('Error, failed to get access token')
 
     try:
         request.session['access_token_tw'] = oauth.access_token.key

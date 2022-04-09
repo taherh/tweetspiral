@@ -8,7 +8,7 @@ from django import forms
 
 class SpiralForm(forms.Form):
     twitter_handles = forms.CharField()
-    command = forms.ChoiceField(
+    command = forms.ChoiceField(choices=
         (('friend_overlap', "Top Follows in Common"),
          ('follower_overlap', "Top Followers in Common"),
          ('group_profile', "Group Profile")))

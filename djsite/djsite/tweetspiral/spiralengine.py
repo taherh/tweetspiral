@@ -42,7 +42,7 @@ class SpiralEngine(object):
             
         # check if we have a login token
         access_token = request.session.get('access_token_tw', None)
-        access_token_secret = request.session.get('access_token_secret_tw', None)    
+        access_token_secret = request.session.get('access_token_secret_tw', None)
         if access_token and access_token_secret:
             auth = tweepy.OAuthHandler(settings.TWITTER_CONSUMER_KEY,
                                        settings.TWITTER_CONSUMER_SECRET)

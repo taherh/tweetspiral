@@ -4,11 +4,12 @@
 # See LICENSE for licensing
 #
 
-from django.conf.urls import *
+from django.urls import path
+
 from . import views
 
 urlpatterns = [
-    url(r'^login$', views.login, name='login'),
-    url(r'^callback$', views.callback, name='callback'),
-    url(r'^logout$', views.logout, name='logout')
+    path('login', views.login, name='login'),
+    path('callback', views.callback, name='callback'),
+    path('logout', views.logout, name='logout')
 ]
