@@ -98,7 +98,7 @@ def users_lookup(request):
         # raw_api=True will tell the api to pass back raw, unparsed results that
         # we can return directly
         spiral_engine = SpiralEngine(request, AutocompleteEngine(request), raw_api=True)
-        content = spiral_engine.api.lookup_users(screen_names=request.GET['screen_name'].split(','))
+        content = spiral_engine.api.lookup_users(screen_name=request.GET['screen_name'].split(','))
         
     return http.HttpResponse(
         content, content_type='application/json'
