@@ -19,7 +19,7 @@ def login(request):
     callback = request.build_absolute_uri(reverse('callback'))
     oauth = tweepy.OAuthHandler(settings.TWITTER_CONSUMER_KEY,
                                 settings.TWITTER_CONSUMER_SECRET,
-                                callback=callback, secure=True)
+                                callback=callback)
     auth_url = oauth.get_authorization_url(False)
     request.session['request_token_tw'] = (oauth.request_token.key,
                                            oauth.request_token.secret)

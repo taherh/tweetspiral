@@ -35,10 +35,10 @@ class SpiralEngine(object):
         auth = None
 
         parser = None
-        cache_prefix = None
+        cache_prefix = 'NORMAL'
         if raw_api:
             parser = tweepy.parsers.RawParser()
-            cache_prefix = 'RAW__'
+            cache_prefix = 'RAW'
             
         # check if we have a login token
         access_token = request.session.get('access_token_tw', None)
@@ -48,22 +48,23 @@ class SpiralEngine(object):
                                        settings.TWITTER_CONSUMER_SECRET)
             auth.set_access_token(access_token, access_token_secret)
             self.logged_in = True
+        else:
+            auth = tweepy.OAuth2BearerHandler(settings.TWITTER_BEARER_TOKEN)
         
         if settings.API_CACHE == 'memory':
             cache = tweepy.MemoryCache(timeout=settings.API_CACHE_TIMEOUT)
         elif settings.API_CACHE == 'file':
-            cache = tweepy.FileCache(cache_dir=settings.API_FILE_CACHE_PATH,
+            cache = tweepy.FileCache(cache_dir=settings.API_FILE_CACHE_PATH + "/" + cache_prefix,
                                      timeout=settings.API_CACHE_TIMEOUT)
         elif settings.API_CACHE == 'redis':
             cache = tweepy.RedisCache(redis.StrictRedis(),
+                                      pre_identifier = "tweepy:" + cache_prefix + ":",
                                       timeout=settings.API_CACHE_TIMEOUT)
         else:
             cache = None
     
-        self.api = tweepy.API(auth, cache=cache, cache_prefix=cache_prefix,
-                              secure=True,
-                              parser=parser,
-                              bearer_token=settings.TWITTER_BEARER_TOKEN)
+        self.api = tweepy.API(auth, cache=cache,
+                              parser=parser)
     
     def process(self, command, req_data):
         '''Processes `command`
@@ -175,7 +176,7 @@ class SpiralEngine(object):
         for input_user in input_users:
             try:
                 rel_id_set = set(lookup_fn(user=input_user))
-            except tweepy.TweepError:
+            except tweepy.TweepyException:
                 logger.exception("lookup exception")
                 continue
             
@@ -198,12 +199,12 @@ class SpiralEngine(object):
     
     def lookup_friends(self, user, limit=20000):
         return tweepy.Cursor(
-            self.api.friends_ids, screen_name=user.screen_name, skip_cache_write=user.protected).items(limit=limit)
+            self.api.get_friend_ids, screen_name=user.screen_name).items(limit=limit)
 
             
     def lookup_followers(self, user, limit=20000):
         return tweepy.Cursor(
-            self.api.followers_ids, screen_name=user.screen_name, skip_cache_write=user.protected).items(limit=limit)
+            self.api.get_follower_ids, screen_name=user.screen_name).items(limit=limit)
 
     def lookup_users(self, user_ids=None, screen_names=None, limit=2000, step=100):
         '''Converts ids/screen_names to full user objects using api calls.
@@ -229,16 +230,16 @@ class SpiralEngine(object):
         for start in range(0, stop, step):
             try:
                 users.extend(
-                    self.api.lookup_users(user_ids=user_ids[start:start+step]))
-            except TweepError:
+                    self.api.lookup_users(user_id=user_ids[start:start+step]))
+            except tweepy.TweepyException:
                 logging.exception("lookup_users exception")
 
         stop = min(len(screen_names), limit)
         for start in range(0, stop, step):
             try:
                 users.extend(
-                    self.api.lookup_users(screen_names=screen_names[start:start+step]))
-            except TweepError:
+                    self.api.lookup_users(screen_name=screen_names[start:start+step]))
+            except tweepy.TweepyException:
                 logging.exception("lookup_users exception")
 
         return users
@@ -258,9 +259,9 @@ class SpiralEngine(object):
             try:
                 statuses.extend(zip(self.api.user_timeline(
                                         screen_name=user.screen_name, count=10,
-                                        trim_user=True, skip_cache_write=user.protected),
+                                        trim_user=True, use_cache=not user.protected),
                                     repeat(user.followers_count)))
-            except tweepy.TweepError:
+            except tweepy.TweepyException:
                 logger.exception("user_timeline exception")
         return statuses
     
