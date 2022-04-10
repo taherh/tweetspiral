@@ -26,7 +26,7 @@ def spiral(request):
     tpl_data['tweet_url'] = request.build_absolute_uri()
     
     if spiral_engine.logged_in:
-        me = spiral_engine.api.me()
+        me = spiral_engine.api.verify_credentials()
         tpl_data['me'] = me
 
         if not request.session.get('ac_friends', False):
